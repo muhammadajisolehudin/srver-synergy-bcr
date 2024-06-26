@@ -4,7 +4,7 @@
   "description": "",
   "scripts": {
     "build": "npx rimraf dist && npx tsc",
-    "start": "bin/www.ts",
+    "start": "ts-node bin/www.ts",
     "dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/bin/www.js\""
   },
   "keywords": [],
