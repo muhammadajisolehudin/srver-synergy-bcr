@@ -46,7 +46,7 @@ const listCars = async (req: Request, res: Response, next: NextFunction): Promis
 // dengan form data
 const createCar = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    const img = req.file? req.file.path : "";
+    const img = req.file ? req.file.path : " ";
     const userId = req.user!.id; // Pastikan req.user sudah terdefinisi
 
     const result = await carService.create(req.body, img, userId);
@@ -65,7 +65,7 @@ const createCar = async (req: Request, res: Response, next: NextFunction): Promi
 
 const updateCar = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    const img = req.file ? req.file.path : "";
+    const img = req.file ? req.file.path : undefined;
     const userId = req.user!.id; 
     // Panggil service untuk melakukan update
     const result = await carService.update(req.params.id, req.body, img, userId);
