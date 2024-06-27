@@ -1,0 +1,61 @@
+name: CI/CD Pipeline with Koyeb
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Install depedencies
+        run: npm install
+  
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Install depedencies
+        run: npm install
+
+      - name: Build project 
+        run: npm run build
+
+      - name: Deploy to Koyeb
+        env:
+          KOYEB_API_TOKEN: ${{ secret.KOYEB_API_TOKEN }}
+        run:
+          curl -X POST "https://api.koyeb.com/v1/fc035777-aa49-45c3-b7be-66a439b7cf87" \
+            -H "Authorization: Bearer $KOYEB_API_TOKEN" \
+            -H "Content-Type: application/json" \
+            -d '{
+              "name": "srver-synergy-bcr",
+              "git": {
+                "repo": "https://github.com/muhammadajisolehudin/srver-synergy-bcr.git",
+                "branch": "main"
+              }
+            }'
+  
+          
