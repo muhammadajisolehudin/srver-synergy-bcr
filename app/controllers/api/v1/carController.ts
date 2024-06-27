@@ -27,22 +27,6 @@ const listCars = async (req: Request, res: Response, next: NextFunction): Promis
   }
 };
 
-//dengan raw
-// const createCar = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-//   try {
-//     const car = await carService.create(req.body);
-//     res.status(201).json({
-//       status: 'OK',
-//       data: car,
-//     });
-//   } catch (err) {
-//     res.status(422).json({
-//       status: 'FAIL',
-//       message: (err as Error).message,
-//     });
-//   }
-// };
-
 // dengan form data
 const createCar = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
