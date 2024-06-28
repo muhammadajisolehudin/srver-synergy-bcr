@@ -29,25 +29,23 @@ export default class CarsRepository {
         await CarsModel.query(this.knexInstance).deleteById(id);
     }
 
-    public async search(filters: Record<string, any>): Promise<Car[]> {
-        const query = CarsModel.query(this.knexInstance);
+    public async searchCars(params: Record<string, string | number>): Promise<Car[]> {
+        // try {
+            let query = CarsModel.query(this.knexInstance);
 
-        if (filters.plate) {
-            query.whereRaw('LOWER(plate) LIKE ?', `%${filters.plate.toLowerCase()}%`);
-        }
-        if (filters.manufacture) {
-            query.whereRaw('LOWER(manufacture) LIKE ?', `%${filters.manufacture.toLowerCase()}%`);
-        }
-        if (filters.model) {
-            query.whereRaw('LOWER(model) LIKE ?', `%${filters.model.toLowerCase()}%`);
-        }
-        if (filters.year) {
-            query.where('year', filters.year);
-        }
-        // Tambahkan filter lain sesuai kebutuhan
+            // Loop untuk menambahkan kondisi pencarian berdasarkan parameter yang diterima
+            for (const key in params) {
+                if (key === 'year') {
+                    query = query.where(key, '=', parseInt(params[key] as string, 10)); // Ubah tahun menjadi integer
+                } else {
+                    query = query.where(key, 'ilike', `%${params[key]}%`); // Pencarian case insensitive
+                }
+            }
 
-        const result = await query;
-        return result;
+            return await query;
+        // } catch (error) {
+        //     throw new Error(`Failed to search cars: ${error}`);
+        // }
     }
 
 

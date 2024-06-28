@@ -15,11 +15,7 @@ const app: Express = express();
 app.use(cors());
 
 // Atau, konfigurasi CORS dengan opsi khusus
-app.use(cors({
-    origin: 'http://localhost:5173', // ganti dengan URL front-end Anda
-    methods: 'GET,POST,PUT,DELETE',
-    allowedHeaders: 'Content-Type,Authorization'
-}));
+app.use(cors());
 
 app.get('/', (_, res) => {
   res.send('Express + TypeScript Server');

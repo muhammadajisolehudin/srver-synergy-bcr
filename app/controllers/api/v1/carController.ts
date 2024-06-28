@@ -106,26 +106,18 @@ const destroyCar = async (req: Request, res: Response, next: NextFunction): Prom
   }
 };
 
-const searchCars = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-  console.log("masuk")
+export const searchCars = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    const query = req.query;
-    const result = await carService.search(query as Record<string, string | undefined>);
+    const query = req.query; // Mendapatkan query parameters dari request
 
-    if (result.status === 200) {
-      res.status(200).json({
-        status: 'OK',
-        data: { cars: result.data?.data },
-        meta: { total: result.data?.count },
-      });
-    } else {
-      res.status(400).json({
-        status: 'FAIL',
-        message: result.message,
-      });
-    }
+    const result = await carService.search(query as Record<string, string | number>); // Cast query sebagai Record<string, string | number>
+
+    res.status(result.status).json({
+      status: result.status === 200 ? 'OK' : 'FAIL',
+      data: result.status === 200 ? result.data : null,
+      message: result.message
+    });
   } catch (err) {
-    console.error("Error during search:", err); // Logging error
     res.status(500).json({
       status: 'ERROR',
       message: (err as Error).message,
