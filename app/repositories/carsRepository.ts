@@ -28,6 +28,31 @@ export default class CarsRepository {
     public async remove(id: string): Promise<void> {
         await CarsModel.query(this.knexInstance).deleteById(id);
     }
+
+    public async search(filters: Record<string, any>): Promise<Car[]> {
+        const query = CarsModel.query(this.knexInstance);
+
+        if (filters.plate) {
+            query.whereRaw('LOWER(plate) LIKE ?', `%${filters.plate.toLowerCase()}%`);
+        }
+        if (filters.manufacture) {
+            query.whereRaw('LOWER(manufacture) LIKE ?', `%${filters.manufacture.toLowerCase()}%`);
+        }
+        if (filters.model) {
+            query.whereRaw('LOWER(model) LIKE ?', `%${filters.model.toLowerCase()}%`);
+        }
+        if (filters.year) {
+            query.where('year', filters.year);
+        }
+        // Tambahkan filter lain sesuai kebutuhan
+
+        const result = await query;
+        return result;
+    }
+
+
+
+
 }
 
 export const carsRepository = new CarsRepository(knexInstance);

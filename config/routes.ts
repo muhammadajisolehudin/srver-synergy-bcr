@@ -12,6 +12,7 @@ apiRouter.post('/api/v1/register', controllers.api.v1.authController.register);
 apiRouter.post('/api/v1/su/register', auth, isSuperAdmin, controllers.api.v1.adminRegistrationController.register);
 
 apiRouter.get('/api/v1/cars', auth, controllers.api.v1.carController.list);
+apiRouter.get('/api/v1/cars/search', auth, isAdmin, controllers.api.v1.carController.search);
 apiRouter.get('/api/v1/cars/:id',auth , controllers.api.v1.carController.show);
 apiRouter.post('/api/v1/cars', auth, isAdmin, uploadeHandler.single('img'), controllers.api.v1.carController.create);
 apiRouter.put('/api/v1/cars/:id', auth, isAdmin, uploadeHandler.single('img'), controllers.api.v1.carController.update);

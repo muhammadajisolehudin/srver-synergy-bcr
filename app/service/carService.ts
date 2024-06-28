@@ -107,10 +107,35 @@ const remove = async (id: string): Promise<{ status: number; message: string }> 
   }
 };
 
+const search = async (query: Record<string, string | undefined>): Promise<{ status: number; data?: ListResult; message?: string }> => {
+  try {
+    const filters: any = {};
+    if (query.plate) {
+      filters.plate = query.plate;
+    }
+    if (query.manufacture) {
+      filters.manufacture = query.manufacture;
+    }
+    if (query.model) {
+      filters.model = query.model;
+    }
+    if (query.year) {
+      filters.year = parseInt(query.year);
+    }
+    const data = await carsRepository.search(filters);
+    return { status: 200, data: { data, count: data.length } };
+  } catch (error: any) {
+    console.error("Error in service:", error); // Logging error
+    return { status: 500, message: `Internal server error: ${error.message}` };
+  }
+};
+
+
 export { 
   create, 
   list, 
   getById, 
   update, 
-  remove 
+  remove, 
+  search
 };

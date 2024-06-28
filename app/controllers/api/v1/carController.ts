@@ -106,6 +106,33 @@ const destroyCar = async (req: Request, res: Response, next: NextFunction): Prom
   }
 };
 
+const searchCars = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  console.log("masuk")
+  try {
+    const query = req.query;
+    const result = await carService.search(query as Record<string, string | undefined>);
+
+    if (result.status === 200) {
+      res.status(200).json({
+        status: 'OK',
+        data: { cars: result.data?.data },
+        meta: { total: result.data?.count },
+      });
+    } else {
+      res.status(400).json({
+        status: 'FAIL',
+        message: result.message,
+      });
+    }
+  } catch (err) {
+    console.error("Error during search:", err); // Logging error
+    res.status(500).json({
+      status: 'ERROR',
+      message: (err as Error).message,
+    });
+  }
+};
+
 
 export default {
   list: listCars,
@@ -113,4 +140,5 @@ export default {
   update: updateCar,
   show: showCar,
   destroy: destroyCar,
+  search: searchCars
 };
